@@ -1,7 +1,7 @@
 !element module 
-module elementmod
-
-    use nodemod
+module elementmodule
+    use nodemodule
+    
     implicit none
     
     type elementtype    
@@ -32,9 +32,9 @@ module elementmod
         this%index1     = index1
         this%index2     = index2
         
-        dx = this1%coorx - this2%coorx
-        dy = this1%coory - this2%coory
-        dz = this1%coorz - this2%coorz
+        dx = this%node1%coorx - this%node2%coorx
+        dy = this%node1%coory - this%node2%coory
+        dz = this%node1%coorz - this%node2%coorz
         
         this%length     = (dx**2+dy**2+dz**2)**0.5
         this%area       = pi*(radius**2)
@@ -43,7 +43,6 @@ module elementmod
         cx = dx/this%length
         cy = dy/this%length
         cz = dz/this%length
-        print *, "Data of element ",this%length," ",this%area," ",this%modulus," ",dx," ",dy," ",dz," ",cx," ",cy," ",cz
         
         iloop: do i = 1,6
             jloop: do j = 1,6
@@ -80,7 +79,7 @@ module elementmod
     
     subroutine showelement(this)
         implicit none
-        type (elementtype), allocatable , intent(in) :: this(:)
+        type (elementtype),dimension(:) , intent(in) :: this
         integer :: i,j,k,n
         
         print *," "
@@ -95,17 +94,16 @@ module elementmod
                 kloop : do k = 1,6
                     if (k /= 6) then
                         write (*,3,advance = 'no') this(i)%stifmatelement(j,k)
-                        3 format(es12.3)
+                        3 format(es11.2)
                     else
                         write (*,4,advance = 'yes') this(i)%stifmatelement(j,k)
-                        4 format(es12.3)                    
+                        4 format(es11.2)                    
                     end if
                     
                 end do kloop
             end do jloop
+            !call checksymmetry(this(i)%stifmatelement)
         end do
-        
-
     end subroutine showelement
 
-end module elementmod
+end module elementmodule
