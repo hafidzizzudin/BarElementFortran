@@ -43,22 +43,19 @@ module summarymodule
 !3 Input BC Displacement
     subroutine inputBCdisplacement(thissystem,BCforceException)
         type(systemtype),intent(inout) :: thissystem
-        integer, allocatable,intent(inout),dimension(:) :: BCforceException
-        integer :: i, nbc,no,nodeid,cord
+        integer, intent(inout),dimension(:) :: BCforceException
+        integer :: i, no,nodeid,cord
         real :: nilai
         character(len=2) :: dof
         
-        read(1,*) nbc
-        read(1,*)
         print *
         print 1
         1 format("INPUT DISPLACEMENT")
         
-        allocate(BCforceException(nbc))
-        
-        do i = 1,nbc
+        read(1,*)
+        do i = 1, size(BCforceException)
             read(1,*) no,nodeid,dof,nilai
-            print *,no, " ",nodeid," ",dof," ", nilai
+            !print *,no, " ",nodeid," ",dof," ", nilai
             
             if(dof == "ux") then
                 call setdisx(thissystem%nodepointer(nodeid),nilai)
@@ -70,7 +67,7 @@ module summarymodule
                 call setdisz(thissystem%nodepointer(nodeid),nilai)
                 cord = nodeid*3
             end if
-            
+            BCforceException(i) = cord
             call setdissystem(thissystem,cord,nilai)
         end do       
     end subroutine inputBCdisplacement
@@ -107,32 +104,5 @@ module summarymodule
             call setforcesystem(thissystem,cord,nilai)
         end do       
     end subroutine inputBCforce
-
-!4 Check Symmetry of matrix
-    subroutine checksymmetry(this)
-        real,dimension(:,:),intent(in) :: this
-        logical :: check = .true.
-        integer :: i,j,icheck,jcheck,sizethis
-        
-        sizethis = int(size(this)**0.5)
-        iloop: do i=2,sizethis
-            jloop: do j=1,i
-                if( this(i,j) /= this(j,i) ) then
-                    check = .not. check
-                    icheck = i
-                    jcheck = j
-                    goto 99
-                end if
-            end do jloop
-        end do iloop
-        
-99      if(check) then
-            print 1
-            1 format("The stiffness matrix is symmetry")
-        else
-            print 2,icheck,jcheck,size(this)
-            2 format("The stiffness matrix is not symmetry, please check again!!!",i4,i4)            
-        end if
-    end subroutine checksymmetry
 
 end module summarymodule

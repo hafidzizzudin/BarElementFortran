@@ -10,7 +10,7 @@ program fembar
     type(nodetype),allocatable, dimension(:) :: nodevector
     type(elementtype),allocatable, dimension(:) :: elementvector
     type(systemtype) :: systemfem
-    integer :: nnode, nelement
+    integer :: nnode, nelement,nbc
     integer,allocatable,dimension(:) :: BCforceException 
     
 !OpenFiles
@@ -47,12 +47,21 @@ program fembar
 
 !BOUNDARY CONDITION
 !BC DISPLACEMENT
+    read (1,*) nbc
+    allocate(BCforceException(nbc))
     call inputBCdisplacement(systemfem,BCforceException)
     call showdisplacementsys(systemfem)
+    
 !BC FORCE
     call inputBCforce(systemfem)
     call showforcesys(systemfem)
     
+    print 1, BCforceException
+    1 format(12i3)
+    
+!CALCULATION DISPLACEMENT
+    call calculatedissystem(systemfem,BCforceException)
+    call showdisplacementsys(systemfem)
 !Deallocation    
     deallocate (nodevector,elementvector,BCforceException,systemfem%displacementsys,systemfem%forcesys)
     !allocate node vector main

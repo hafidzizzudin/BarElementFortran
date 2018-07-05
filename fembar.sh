@@ -18,3 +18,8 @@ gfortran -Wall -g *.o -o fidzfem.exe
 echo -e "${GREEN}The program is ready to run!!! "
 echo *.exe
 echo -e "${NC}"
+
+#echo -e "${GREEN}Plotting the result...${NC}"
+#gnuplot
+#plot 'output.txt'
+
