@@ -74,7 +74,6 @@ module elementmodule
                 
             end do jloop
         end do iloop
-        
     end subroutine constructorelement
     
     subroutine showelement(this)
@@ -102,8 +101,35 @@ module elementmodule
                     
                 end do kloop
             end do jloop
-            !call checksymmetry(this(i)%stifmatelement)
+            call checksymmetry(this(i)%stifmatelement)
         end do
     end subroutine showelement
+    
+    subroutine checksymmetry(matrix)
+        implicit none
+        real, dimension(:,:), intent(in) :: matrix
+        integer :: row,col
+        logical :: symmetry = .true.
+        
+        rowloop: do row = 2,size(matrix,1)
+            colloop: do col = 1,row-1
+                if(matrix(row,col) /= matrix(col,row)) then
+                    symmetry = .false.
+                    exit
+                end if
+            end do colloop
+            if(symmetry .eqv. .false.) then
+                exit
+            end if
+        end do rowloop
+        
+        if(symmetry .eqv. .true.) then
+            write(*,*) "THE MATRIX IS SYMMETRY"
+            write(*,*)
+        else
+            write(*,*) "THE MATRIX IS NOT SYMMETRY"
+            write(*,*)
+        end if
+    end subroutine 
     
 end module elementmodule

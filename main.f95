@@ -40,30 +40,30 @@ program fembar
 
 !SYSTEM Factory
     call systemconstructor(systemfem,nodevector,elementvector)
-    call shownode(systemfem%nodepointer)
+!~     call shownode(systemfem%nodepointer)
     call showelement(systemfem%elementpointer)
-    call showsystem(systemfem)
-    call checksymmetry(systemfem%systemstifmat)
+!~     call showsystem(systemfem)
+!~     call checksymmetry(systemfem%systemstifmat)
 
 !BOUNDARY CONDITION
 !BC DISPLACEMENT
-    read (1,*) nbc
-    allocate(BCforceException(nbc))
-    call inputBCdisplacement(systemfem,BCforceException)
-    call showdisplacementsys(systemfem)
+!~     read (1,*) nbc
+!~     allocate(BCforceException(nbc))
+!~     call inputBCdisplacement(systemfem,BCforceException)
+!~     call showdisplacementsys(systemfem)
     
 !BC FORCE
-    call inputBCforce(systemfem)
-    call showforcesys(systemfem)
+!~     call inputBCforce(systemfem)
+!~     call showforcesys(systemfem)
     
-    print 1, BCforceException
-    1 format(12i3)
+!~     print 1, BCforceException
+!~     1 format(12i3)
     
 !CALCULATION DISPLACEMENT
-    call calculatedissystem(systemfem,BCforceException)
-    call showdisplacementsys(systemfem)
+!~     call calculatedissystem(systemfem,BCforceException)
+!~     call showdisplacementsys(systemfem)
 !Deallocation    
-    deallocate (nodevector,elementvector,BCforceException,systemfem%displacementsys,systemfem%forcesys)
+!    deallocate (nodevector,elementvector,BCforceException,systemfem%displacementsys,systemfem%forcesys)
     !allocate node vector main
     !allocate elementvector main
     !allocate BCforceException main
