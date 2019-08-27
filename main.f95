@@ -25,7 +25,6 @@ program fembar
     
     !Construct node type    
     call constructornode(nodevector)
-!    call shownode(nodevector)
 
 !ELEMENT Factory
     !Assign number of elements
@@ -36,39 +35,30 @@ program fembar
     
     !Construct element type
     call inputelement(elementvector,nodevector)    
-!    call showelement(elementvector)
 
 !SYSTEM Factory
     call systemconstructor(systemfem,nodevector,elementvector)
-!~     call shownode(systemfem%nodepointer)
-    call showelement(systemfem%elementpointer)
-!~     call showsystem(systemfem)
-!~     call checksymmetry(systemfem%systemstifmat)
 
 !BOUNDARY CONDITION
 !BC DISPLACEMENT
-!~     read (1,*) nbc
-!~     allocate(BCforceException(nbc))
-!~     call inputBCdisplacement(systemfem,BCforceException)
-!~     call showdisplacementsys(systemfem)
+    read (1,*) nbc
+    allocate(BCforceException(nbc))
+    BCforceException = 0
+    call inputBCdisplacement(systemfem,BCforceException)
     
 !BC FORCE
-!~     call inputBCforce(systemfem)
-!~     call showforcesys(systemfem)
-    
-!~     print 1, BCforceException
-!~     1 format(12i3)
+    call inputBCforce(systemfem)
     
 !CALCULATION DISPLACEMENT
-!~     call calculatedissystem(systemfem,BCforceException)
-!~     call showdisplacementsys(systemfem)
+    call calculatedissystem(systemfem,BCforceException)
+
+!CALCULATION FORCE
+    call calculateforcesystem(systemfem)
+
+
 !Deallocation    
-!    deallocate (nodevector,elementvector,BCforceException,systemfem%displacementsys,systemfem%forcesys)
-    !allocate node vector main
-    !allocate elementvector main
-    !allocate BCforceException main
-    !allocate systemfem%displacementsys systemmodule, subroutine systemconstructor
-    !allocate systemfem%forcesys systemmodule, subroutine systemconstructor
+    deallocate (nodevector,elementvector,BCforceException,systemfem%displacementsys,&
+                systemfem%systemstifmat,systemfem%forcesys)
 
 !closeFiles
     close(1)

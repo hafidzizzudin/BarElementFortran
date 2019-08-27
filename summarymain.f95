@@ -48,10 +48,6 @@ module summarymodule
         real :: nilai
         character(len=2) :: dof
         
-        print *
-        print 1
-        1 format("INPUT DISPLACEMENT")
-        
         read(1,*)
         do i = 1, size(BCforceException)
             read(1,*) no,nodeid,dof,nilai
@@ -82,13 +78,9 @@ module summarymodule
         read(1,*) nbc
         read(1,*)
         
-        print*
-        print 1
-        1 format("INPUT FORCE")
-        
         do i = 1,nbc
             read(1,*) no,nodeid,dof,nilai
-            print *,no, " ",nodeid," ",dof," ", nilai
+!~             print *,no, " ",nodeid," ",dof," ", nilai
             
             if(dof == "fx") then
                 call setforcex(thissystem%nodepointer(nodeid),nilai)
